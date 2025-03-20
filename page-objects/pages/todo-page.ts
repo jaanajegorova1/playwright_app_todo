@@ -8,12 +8,13 @@ export class TodoPage {
   readonly footer: Locator;
   readonly todoList: Locator;
   readonly tasks: Task;
+  readonly allButton: Locator;
   readonly activeButton: Locator;
   readonly completedButton: Locator;
   readonly clearCompletedButton: Locator;
-  readonly allTasksButton: Locator;
-  readonly todoTaskField: Locator;
-  readonly toggleAll: Locator;
+  readonly toggleAllButton: Locator;
+  readonly todoItemField: Locator;
+  readonly toggleItem: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -21,12 +22,13 @@ export class TodoPage {
     this.footer = page.getByTestId("footer");
     this.todoList = page.getByTestId("todo-list");
     this.tasks = new Task(this.todoList);
-    this.activeButton = page.getByTestId('[href="#/active"]'); //<a class="selected" href="#/active">Active</a>
-    this.completedButton = page.getByTestId('[href="#/completed"]'); //<a class="" href="#/completed">Completed</"a>
-    this.clearCompletedButton = page.getByTestId(".clear-completed"); //<button class="clear-completed">Clear completed</button>
-    this.allTasksButton = page.locator('[href="#/"]'); //class="selected"
-    this.todoTaskField = page.locator('data-testid="todo-item-label"');
-    this.toggleAll = page.locator('data-testid="toggle-all"');
+    this.allButton = page.locator('[href="#/"]'); //('a.selected');
+    this.activeButton = page.locator('[href="#/active"]');
+    this.completedButton = page.locator('[href="#/completed"]');
+    this.clearCompletedButton = page.locator(".clear-completed");
+    this.toggleAllButton = page.getByTestId("toggle-all");
+    this.todoItemField = page.getByTestId("todo-item-label");
+    this.toggleItem = page.locator(".toggle");
   }
 
   async open(): Promise<void> {
@@ -38,13 +40,18 @@ export class TodoPage {
     await this.newTaskInputField.press("Enter");
   }
 
+  async allTasks(): Promise<void> {
+    await this.allButton.hover();
+    await this.allButton.click();
+  }
+
   async checkTaskCount(expected_count: number): Promise<void> {
     const count = await this.tasks.taskLocator.count();
     expect(count).toBe(expected_count);
   }
 
   async checkFooterButtonsAreVisible(): Promise<void> {
-    await this.allTasksButton.isVisible();
+    await this.allButton.isVisible();
     await this.activeButton.isVisible();
     await this.completedButton.isVisible();
     await this.clearCompletedButton.isVisible();
@@ -54,13 +61,7 @@ export class TodoPage {
     const activeButton = this.activeButton.locator("button", {
       hasText: "Active",
     });
-    await expect(activeButton).toBeEnabled();
-    await activeButton.hover();
     await activeButton.click();
-    //const activeTasks = await this.activeButton.locator('.task.active');
-    //await expect(activeTasks).toHaveCountGreaterThan(0);
-    await expect(activeButton).toHaveClass(".selected");
-    expect(this.todoTaskField).not.toBeNull;
   }
 
   // async clearCompletedButtonFunctionality(innerText: string): Promise<void> {

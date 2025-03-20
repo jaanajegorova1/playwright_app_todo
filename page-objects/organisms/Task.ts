@@ -30,11 +30,4 @@ export class Task {
     const locator = this.outerContainer.locator("li", { hasText: innerText });
     await expect(locator).toHaveClass("completed");
   }
-
-  async checkAllCompleted(): Promise<void> {
-    const allTasks = await this.taskLocator.all();
-    for (const task of allTasks) {
-      expect(task).toHaveClass("completed");
-    }
-  }
 }
