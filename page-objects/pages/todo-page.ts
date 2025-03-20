@@ -56,21 +56,4 @@ export class TodoPage {
     await this.completedButton.isVisible();
     await this.clearCompletedButton.isVisible();
   }
-
-  async checkActiveButtonFunctionality(innerText: string): Promise<void> {
-    const activeButton = this.activeButton.locator("button", {
-      hasText: "Active",
-    });
-    await activeButton.click();
-  }
-
-  // async clearCompletedButtonFunctionality(innerText: string): Promise<void> {
-  //   await this.clearCompletedButton.isVisible();
-  //   const locator = this.clearCompletedButton.locator("li", { hasText: innerText });
-  //   await expect(locator).toHaveText(innerText);
-  // }
-
-  // async checkClearCompletedButtonFunctionality(): Promise<void> {
-  //   await ...
-  // }
 }
